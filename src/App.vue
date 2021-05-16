@@ -1,16 +1,11 @@
 <template>
   <v-app>
-    <layout/>
+    <layout />
     <v-main id="app">
-      <!-- 过渡动画，先滑出旧元素再滑入新元素，原本会有旧元素占位的bug -->
-      <v-slide-x-transition mode="out-in" appear>
         <!-- 主页面 -->
         <keep-alive>
-          
           <router-view></router-view>
-          
         </keep-alive>
-      </v-slide-x-transition>
     </v-main>
   </v-app>
 </template>
