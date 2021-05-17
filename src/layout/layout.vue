@@ -5,8 +5,8 @@
       <!-- 导航栏标题 -->
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title> 什么辣鸡Web应用 </v-list-item-title>
-          <v-list-item-subtitle> 我写的辣鸡玩意 </v-list-item-subtitle>
+          <v-list-item-title>安居智慧物业系统</v-list-item-title>
+          <v-list-item-subtitle> 欢迎，{{ account }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -53,7 +53,7 @@
     <!-- 顶部标题栏 -->
     <v-app-bar app v-if="showLayout">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>欢迎，{{ username }}</v-toolbar-title>
+      <v-toolbar-title>欢迎</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -81,11 +81,13 @@ export default {
           return true;
       }
     },
+    account(){
+      return this.$store.state.account
+    }
   },
   data: () => ({
     drawer: null,
     navigation: navigation,
-    username: "用户名",
   }),
 };
 </script>

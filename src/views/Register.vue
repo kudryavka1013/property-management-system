@@ -9,7 +9,11 @@
       </v-card-title>
 
       <v-card-text>
-        <change-password-form btnTitle="激活" :account="account" />
+        <change-password-form
+          btnTitle="激活"
+          :account="account"
+          v-on:formsubmit="getclick"
+        />
       </v-card-text>
     </v-card>
   </div>
@@ -20,9 +24,25 @@ import ChangePasswordForm from "@/components/ChangePasswordForm.vue";
 export default {
   name: "Register",
   components: { ChangePasswordForm },
-  data: () => ({
-    account: 1234,
-  }),
+  data: () => ({}),
+  computed: {
+    account() {
+      return this.$store.state.account;
+    },
+  },
+  methods: {
+    getclick: function (userinput) {
+      alert(
+        userinput.account +
+          "\n" +
+          userinput.opassword +
+          "\n" +
+          userinput.npassword +
+          "\n" +
+          userinput.cpassword
+      );
+    },
+  },
 };
 </script>
 

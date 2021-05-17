@@ -34,13 +34,21 @@
       :type="showcpsw ? 'text' : 'password'"
       label="确认密码"
       v-model="cpassword"
-            :append-icon="showcpsw ? 'mdi-eye' : 'mdi-eye-off'"
-      @click:append="showpsw = !showpsw"
+      :append-icon="showcpsw ? 'mdi-eye' : 'mdi-eye-off'"
+      @click:append="showcpsw = !showcpsw"
       prepend-icon="mdi-lock-check-outline"
       hint="6-16位的字符、数字和下划线"
       required
     ></v-text-field>
-    <v-btn color="primary" block large tile depressed class="mt-4 btn" @click="$emit('formclick')">
+    <v-btn
+      color="primary"
+      block
+      large
+      tile
+      depressed
+      class="mt-4 btn"
+      @click="$emit('formsubmit', userinput)"
+    >
       {{ btnTitle }}
     </v-btn>
   </div>
@@ -49,12 +57,25 @@
 <script>
 export default {
   name: "ChangePasswordForm",
-  props: ["account","opassword", "npassword", "cpassword", "btnTitle"],
+  props: ["account", "btnTitle"],
   data: () => ({
     showopsw: false,
     shownpsw: false,
     showcpsw: false,
+    opassword: '',
+    npassword: '',
+    cpassword: '',
   }),
+  computed: {
+    userinput() {
+      return {
+        account: this.account,
+        opassword: this.opassword,
+        npassword: this.npassword,
+        cpassword: this.cpassword,
+      };
+    },
+  },
 };
 </script>
 
