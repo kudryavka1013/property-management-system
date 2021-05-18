@@ -19,6 +19,9 @@
       prepend-icon="mdi-lock-outline"
       hint="6-16位的字符、数字和下划线"
       required
+      :rules="[rules.password]"
+      @keyup="onOpasswordKeyup"
+      @keydown="onOpasswordKeydown"
     ></v-text-field>
     <v-text-field
       :type="shownpsw ? 'text' : 'password'"
@@ -29,6 +32,9 @@
       prepend-icon="mdi-lock-reset"
       hint="6-16位的字符、数字和下划线"
       required
+      :rules="[rules.password]"
+      @keyup="onNpasswordKeyup"
+      @keydown="onNpasswordKeydown"
     ></v-text-field>
     <v-text-field
       :type="showcpsw ? 'text' : 'password'"
@@ -39,6 +45,10 @@
       prepend-icon="mdi-lock-check-outline"
       hint="6-16位的字符、数字和下划线"
       required
+      :rules="[rules.password]"
+      @keyup="onCpasswordKeyup"
+      @keydown="onCpasswordKeydown"
+      :error-messages="inconsistent? '两次输入不一致' : '' "
     ></v-text-field>
     <v-btn
       color="primary"
@@ -55,6 +65,10 @@
 </template>
 
 <script>
+import {
+  validPasswordKeyup,
+  passwordKeydownIsValid,
+} from "@/utils/checkValidate.js";
 export default {
   name: "ChangePasswordForm",
   props: ["account", "btnTitle"],
@@ -62,9 +76,13 @@ export default {
     showopsw: false,
     shownpsw: false,
     showcpsw: false,
-    opassword: '',
-    npassword: '',
-    cpassword: '',
+    opassword: "",
+    npassword: "",
+    cpassword: "",
+    inconsistent: false,
+    rules: {
+      password: value => value.length >= 6 || "请输入正确格式的密码",
+    },
   }),
   computed: {
     userinput() {
@@ -74,6 +92,40 @@ export default {
         npassword: this.npassword,
         cpassword: this.cpassword,
       };
+    },
+  },
+  methods: {
+    onOpasswordKeyup: function () {
+      var string = this.opassword;
+      this.opassword = validPasswordKeyup(string);
+    },
+    onOpasswordKeydown: function (event) {
+      if (passwordKeydownIsValid(event.keycode)) {
+        event.preventDefault();
+      }
+    },
+    onNpasswordKeyup: function () {
+      var string = this.npassword;
+      this.npassword = validPasswordKeyup(string);
+    },
+    onNpasswordKeydown: function (event) {
+      if (passwordKeydownIsValid(event.keycode)) {
+        event.preventDefault();
+      }
+    },
+    onCpasswordKeyup: function () {
+      var string = this.cpassword;
+      this.cpassword = validPasswordKeyup(string);
+      if(this.cpassword != this.npassword){
+        this.inconsistent = true
+      }else{
+        this.inconsistent = false
+      }
+    },
+    onCpasswordKeydown: function (event) {
+      if (passwordKeydownIsValid(event.keycode)) {
+        event.preventDefault();
+      }
     },
   },
 };

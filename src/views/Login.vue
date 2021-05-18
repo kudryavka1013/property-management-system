@@ -12,8 +12,8 @@
             hint="11位手机号"
             :rules="[rules.account]"
             maxlength="11"
-            @keyup="checkAccountKeyup"
-            @keydown="checkAccountKeydown"
+            @keyup="onAccountKeyup"
+            @keydown="onAccountKeydown"
             v-model="account"
           ></v-text-field>
           <v-text-field
@@ -25,8 +25,8 @@
             hint="6-16位的字符、数字和下划线"
             :rules="[rules.password]"
             prepend-icon="mdi-lock-outline"
-            @keyup="checkPasswordKeyup"
-            @keydown="checkPasswordKeydown"
+            @keyup="onPasswordKeyup"
+            @keydown="onPasswordKeydown"
             v-model="password"
           ></v-text-field>
         </v-form>
@@ -43,6 +43,12 @@
 </template>
 
 <script>
+import {
+  validAccountKeyup,
+  accountKeydownIsValid,
+  validPasswordKeyup,
+  passwordKeydownIsValid
+} from "@/utils/checkValidate.js";
 export default {
   name: "Login",
   data: () => ({
@@ -51,45 +57,26 @@ export default {
     password: "",
     remember: false,
     rules: {
-      account: (value) => value.length == 11 || "请输入正确格式的手机号",
+      account: (value) => (value!= null && value.length == 11) || "请输入正确格式的手机号",
       password: (value) => value.length >= 6 || "请输入正确格式的密码",
     },
   }),
   methods: {
-    checkAccountKeyup: function () {
-      if (this.account != null) {
-        var str = "";
-        for (let i = 0; i < this.account.length; i++) {
-          var charCode = this.account.charCodeAt(i);
-          if (charCode >= 48 && charCode <= 57) {
-            str += this.account.charAt(i);
-          }
-        }
-        this.account = str;
-      }
+    onAccountKeyup: function () {
+      var string = this.account;
+      this.account = validAccountKeyup(string);
     },
-    checkAccountKeydown: function (event) {
-      var keyCode = event.keyCode;
-      if (!(keyCode >= 48 && keyCode <= 57) && !(keyCode == 8)) {
+    onAccountKeydown: function (event) {
+      if (accountKeydownIsValid(event.keycode)) {
         event.preventDefault();
       }
     },
-    checkPasswordKeyup: function () {
-      if (this.password != null) {
-        var str = "";
-        for (let i = 0; i < this.password.length; i++) {
-          var charCode = this.password.charCodeAt(i);
-          if (charCode >= 33 && charCode <= 127) {
-            str += this.password.charAt(i);
-          }
-        }
-        this.password = str.slice(0, 16);
-      }
+    onPasswordKeyup: function () {
+      var string = this.password;
+      this.password = validPasswordKeyup(string);
     },
-    checkPasswordKeydown: function (event) {
-      console.log(event);
-      var keyCode = event.keyCode;
-      if (!(keyCode >= 33 && keyCode <= 127) && !(keyCode == 8)) {
+    onPasswordKeydown: function (event) {
+      if (passwordKeydownIsValid(event.keycode)) {
         event.preventDefault();
       }
     },
