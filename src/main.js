@@ -10,13 +10,16 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.prototype.$axios = axios;
+axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afacbffc337c3/anj';
 
 const store = new Vuex.Store({
   state: {
-    account: '用户名',
+    account: '',
+    username: '用户名',
+    isLogin: false,
   },
   mutations: {
-    upgradeAccount(state,newAccount) {
+    upgradeAccount(state, newAccount) {
       state.account = newAccount
     }
   }

@@ -40,9 +40,40 @@ var passwordKeydownIsValid = function (keyCode) {
         return false;
     }
 };
+
+var checkAccountValid = function (account) {
+    if (account.length != 11) {
+        return false
+    } else {
+        for (let i = 0; i < account.length; i++) {
+            var charCode = account.charCodeAt(i);
+            if (charCode < 48 || charCode > 57) {
+                return false
+            }
+        }
+        return true
+    }
+}
+
+var checkPasswordValid = function(password){
+    if(password.length < 6 || password.length > 16){
+        return false
+    }else{
+        for (let i = 0; i < password.length; i++) {
+            var charCode = password.charCodeAt(i);
+            if (charCode < 33 || charCode > 127) {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 export {
     validAccountKeyup,
     accountKeydownIsValid,
     validPasswordKeyup,
-    passwordKeydownIsValid
+    passwordKeydownIsValid,
+    checkAccountValid,
+    checkPasswordValid
 }

@@ -5,8 +5,8 @@
       <!-- 导航栏标题 -->
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>安居智慧物业系统</v-list-item-title>
-          <v-list-item-subtitle> 欢迎，{{ account }}</v-list-item-subtitle>
+          <v-list-item-title>安居小区管理系统</v-list-item-title>
+          <v-list-item-subtitle> 欢迎，{{ username }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -83,6 +83,9 @@ export default {
     },
     account(){
       return this.$store.state.account
+    },
+    username(){
+      return  this.$store.state.username
     }
   },
   data: () => ({

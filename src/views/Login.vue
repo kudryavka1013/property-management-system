@@ -1,7 +1,10 @@
 <template>
   <div class="wrapper">
-    <v-card class="login pa-6">
-      <v-card-title>安居智慧物业系统，请先登录</v-card-title>
+    <v-card class="login px-6 py-2">
+      <v-card-title class="mb-4">
+        <v-icon large color="green">mdi-home-city-outline</v-icon>
+        <span class="ms-4">安居小区管理系统，请先登录</span>
+      </v-card-title>
       <v-card-text>
         <v-form>
           <v-text-field
@@ -15,6 +18,7 @@
             @keyup="onAccountKeyup"
             @keydown="onAccountKeydown"
             v-model="account"
+            :disabled="isLoading"
           ></v-text-field>
           <v-text-field
             :type="showpsw ? 'text' : 'password'"
@@ -28,15 +32,27 @@
             @keyup="onPasswordKeyup"
             @keydown="onPasswordKeydown"
             v-model="password"
+            :disabled="isLoading"
           ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions class="mx-2">
-        <v-btn color="primary" large tile depressed class="mb-2" @click="login">
-          登录
+        <v-btn
+          color="primary"
+          large
+          depressed
+          @click="login"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          登 录
         </v-btn>
         <v-spacer></v-spacer>
-        <v-checkbox v-model="remember" label="记住密码"></v-checkbox>
+        <v-checkbox
+          v-model="remember"
+          label="记住密码"
+          :disabled="isLoading"
+        ></v-checkbox>
       </v-card-actions>
     </v-card>
   </div>
@@ -47,21 +63,27 @@ import {
   validAccountKeyup,
   accountKeydownIsValid,
   validPasswordKeyup,
-  passwordKeydownIsValid
+  passwordKeydownIsValid,
+  checkAccountValid,
+  checkPasswordValid,
 } from "@/utils/checkValidate.js";
+
 export default {
   name: "Login",
   data: () => ({
     showpsw: false,
+    isLoading: false,
     account: "",
     password: "",
     remember: false,
     rules: {
-      account: (value) => (value!= null && value.length == 11) || "请输入正确格式的手机号",
+      account: (value) =>
+        (value != null && value.length == 11) || "请输入正确格式的手机号",
       password: (value) => value.length >= 6 || "请输入正确格式的密码",
     },
   }),
   methods: {
+    // 输入验证
     onAccountKeyup: function () {
       var string = this.account;
       this.account = validAccountKeyup(string);
@@ -81,11 +103,74 @@ export default {
       }
     },
     login: function () {
+      // 判断用户输入是否符合要求
+      var accountIsValid = checkAccountValid(this.account);
+      var passwordIsValid = checkPasswordValid(this.password);
+      // console.log(accountIsValid)
+      // console.log(passwordIsValid)
+      if (accountIsValid && passwordIsValid) {
+        this.isLoading = true;
+        this.loginreq(this.account, this.password);
+      } else {
+        alert("请检查你的输入");
+      }
+    },
+    loginreq: function (act, psw) {
+      //login
+      let that = this;
+      this.$axios({
+        method: "post",
+        url: "/login",
+        data: {
+          account: act,
+          password: psw,
+        },
+      })
+        .then(function (response) {
+          that.isLoading = false;
+          // console.log(response);
+          // 拿到username account和其它会话信息，去判断怎么响应
+          if (response) {
+            that.loginsuccess();
+          } else {
+            that.loginfail();
+          }
+        })
+        .catch(function (error) {
+          that.isLoading = false;
+          console.log(error);
+          alert("登录超时，请检查您的网络设置");
+        });
+    },
+    loginsuccess: function () {
+      //记住密码功能，这里要在登录成功后执行
+      if (this.remember) {
+        localStorage.setItem("account", this.account);
+        localStorage.setItem("password", this.password);
+      } else {
+        localStorage.removeItem("account");
+        localStorage.removeItem("password");
+      }
       this.$store.commit("upgradeAccount", this.account);
       this.$router.push("home");
     },
+    loginfail: function () {
+      alert("账号或密码错误，请重新输入");
+    },
+    checkLocalRemember: function () {
+      let raccount = localStorage.getItem("account");
+      let rpassword = localStorage.getItem("password");
+      if (raccount != null && rpassword != null) {
+        this.account = raccount;
+        this.password = rpassword;
+        this.remember = true;
+      }
+    },
   },
   computed: {},
+  created: function () {
+    this.checkLocalRemember();
+  },
 };
 </script>
 
