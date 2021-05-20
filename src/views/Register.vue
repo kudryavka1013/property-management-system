@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <v-card class="register px-6 py-4">
+    <v-card tile class="register px-6 py-4">
       <v-card-title>
         <v-btn icon to="login">
           <v-icon color="primary">mdi-arrow-left</v-icon>

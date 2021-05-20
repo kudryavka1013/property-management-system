@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <v-card class="login px-6 py-2">
+    <v-card tile class="login px-6 py-2">
       <v-card-title class="mb-4">
         <v-icon large color="green">mdi-home-city-outline</v-icon>
         <span class="ms-4">安居小区管理系统，请先登录</span>
@@ -26,7 +26,7 @@
             :append-icon="showpsw ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showpsw = !showpsw"
             maxlength="16"
-            hint="6-16位的字符、数字和下划线"
+            hint="6-16位的字母、数字、字符和下划线"
             :rules="[rules.password]"
             prepend-icon="mdi-lock-outline"
             @keyup="onPasswordKeyup"
@@ -41,6 +41,7 @@
           color="primary"
           large
           depressed
+          tile
           @click="login"
           :loading="isLoading"
           :disabled="isLoading"

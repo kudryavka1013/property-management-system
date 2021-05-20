@@ -1,13 +1,16 @@
 <template>
   <div>
-    <span>settings</span>
-    <v-btn>修改密码</v-btn>
+    <userinfo-card></userinfo-card>
   </div>
 </template>
 
 <script>
+import UserinfoCard from '@/components/UserinfoCard.vue'
 export default {
   name: "Settings",
+  components:{
+    UserinfoCard
+  }
 };
 </script>
 
