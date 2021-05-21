@@ -1,6 +1,6 @@
 const navigation = [{
     route: 'home',
-    icon: 'mdi-home',
+    icon: 'mdi-home-outline',
     title: '主页'
 }, {
     route: 'settings',

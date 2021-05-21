@@ -15,7 +15,7 @@ axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afac
 const store = new Vuex.Store({
   state: {
     account: '',
-    username: '用户名',
+    username: '',
     isLogin: false,
   },
   mutations: {
