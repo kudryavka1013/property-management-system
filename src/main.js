@@ -21,6 +21,9 @@ const store = new Vuex.Store({
   mutations: {
     upgradeAccount(state, newAccount) {
       state.account = newAccount
+    },
+    upgradeUsername(state, newUsername){
+      state.username = newUsername
     }
   }
 })

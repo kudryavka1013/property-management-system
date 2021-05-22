@@ -3,23 +3,34 @@
     <v-card-title class="mx-2">我的账户</v-card-title>
     <div class="px-4 pb-4 mx-2">
       <div class="mb-2">
-        <span class="tit">用户名</span>
-        <span>用户名啊</span>
+        <span class="">用户名</span>
+        <span>{{ username }}</span>
       </div>
       <div>
-        <span class="tit">账号</span>
-        <span>123412</span>
+        <span class="">账号</span>
+        <span>{{ account }}</span>
       </div>
     </div>
 
     <v-divider class="mx-4"></v-divider>
     <v-card-actions class="ma-2">
-      <v-btn tile text class="me-4" color="primary">
+      <v-btn
+        tile
+        text
+        class="me-4"
+        color="primary"
+        @click="$emit('changeview', 'change-userinfo')"
+      >
         <v-icon left>mdi-account-edit-outline</v-icon>
         <span>修改个人信息</span>
       </v-btn>
-      <v-btn tile text color="primary">
-          <v-icon left>mdi-shield-edit-outline</v-icon>
+      <v-btn
+        tile
+        text
+        color="primary"
+        @click="$emit('changeview', 'change-password')"
+      >
+        <v-icon left>mdi-shield-edit-outline</v-icon>
         <span>修改密码</span>
       </v-btn>
     </v-card-actions>
@@ -29,14 +40,14 @@
 <script>
 export default {
   name: "UserinfoCard",
-  props: ["userinfo"],
+  props: ["account", "username"],
 };
 </script>
 
 <style scoped>
-.tit{
-    font-weight: bold;
-    font-size: 14px;
+.tit {
+  font-weight: bold;
+  font-size: 14px;
 }
 span {
   display: block;

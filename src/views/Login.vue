@@ -121,18 +121,17 @@ export default {
       let that = this;
       this.$axios({
         method: "post",
-        url: "/login",
+        url: "/owner/login",
         data: {
-          account: act,
+          id: act,
           password: psw,
         },
       })
         .then(function (response) {
           that.isLoading = false;
-          // console.log(response);
           // 拿到username account和其它会话信息，去判断怎么响应
-          if (response) {
-            that.loginsuccess();
+          if (response.data.msg == 'success') {
+            that.loginsuccess(response.data);
           } else {
             that.loginfail();
           }
@@ -143,7 +142,7 @@ export default {
           alert("登录超时，请检查您的网络设置");
         });
     },
-    loginsuccess: function () {
+    loginsuccess: function (data) {
       //记住密码功能，这里要在登录成功后执行
       if (this.remember) {
         localStorage.setItem("account", this.account);
@@ -152,8 +151,13 @@ export default {
         localStorage.removeItem("account");
         localStorage.removeItem("password");
       }
-      this.$store.commit("upgradeAccount", this.account);
-      this.$router.push("home");
+      this.$store.commit("upgradeAccount", data.result.id);
+      this.$store.commit("upgradeUsername", data.result.username);
+      if (data.result.init) {
+        this.$router.push("register");
+      } else {
+        this.$router.push("home");
+      }
     },
     loginfail: function () {
       alert("账号或密码错误，请重新输入");

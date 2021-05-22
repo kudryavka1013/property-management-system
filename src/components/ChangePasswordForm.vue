@@ -60,7 +60,7 @@
       large
       tile
       depressed
-      class="mt-4 btn"
+      class="mt-4"
       @click="$emit('formsubmit', userinput)"
       :loading="isLoading"
       :disabled="isLoading"

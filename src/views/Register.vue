@@ -60,7 +60,7 @@ export default {
         method: "post",
         url: "/register",
         data: {
-          account: userinput.account,
+          id: userinput.account,
           password: userinput.opassword,
           npassword: userinput.npassword,
         },
@@ -68,7 +68,7 @@ export default {
         .then(function (response) {
           that.isLoading = false;
           //判断是否成功，执行相应操作
-          if (response) {
+          if (response.data.msg == "success") {
             that.registersuccess();
           } else {
             that.registerfail();
@@ -84,7 +84,6 @@ export default {
       alert("修改成功，请重新登录");
       this.isLoading = false;
       this.$store.commit("upgradeAccount", "");
-      console.log(this.account)
       this.$router.push("login");
     },
     registerfail: function () {

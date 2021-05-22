@@ -69,11 +69,20 @@ var checkPasswordValid = function(password){
     }
 }
 
+var checkUsernameValid = function(username){
+    if(username.length < 2 || username.length > 12){
+        return false
+    }else{
+        return true
+    }
+}
+
 export {
     validAccountKeyup,
     accountKeydownIsValid,
     validPasswordKeyup,
     passwordKeydownIsValid,
     checkAccountValid,
-    checkPasswordValid
+    checkPasswordValid,
+    checkUsernameValid
 }
