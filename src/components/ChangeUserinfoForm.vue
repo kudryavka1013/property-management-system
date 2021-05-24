@@ -15,6 +15,9 @@
       prepend-icon="mdi-account-outline"
       v-model="nusername"
       :disabled="isLoading"
+      :rules="[rules.username]"
+      hint="2-8位"
+      maxlength="8"
     ></v-text-field>
     <v-btn
       color="primary"
@@ -37,6 +40,9 @@ export default {
   name: "ChangeUserinfoForm",
   data: () => ({
     nusername: "",
+    rules: {
+      username: (value) => value.length >= 2 || "请输入正确格式的用户名",
+    },
   }),
   props: ["btnTitle", "isLoading", "username", "account"],
   computed: {

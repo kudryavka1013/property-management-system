@@ -95,7 +95,7 @@ export default {
       let that = this;
       this.$axios({
         method: "post",
-        url: "/changepassword",
+        url: "/owner/changepassword",
         data: {
           id: userinput.account,
           password: userinput.opassword,
@@ -105,7 +105,7 @@ export default {
         .then(function (response) {
           that.isLoading = false;
           //判断是否成功，执行相应操作
-          if (response) {
+          if (response.data.msg == "success") {
             that.changePasswordSuccess();
           } else {
             that.changeFail();
@@ -128,7 +128,7 @@ export default {
       let that = this;
       this.$axios({
         method: "post",
-        url: "/changeuserinfo",
+        url: "/owner/changeuserinfo",
         data: {
           id: userinput.account,
           nusername: userinput.nusername,

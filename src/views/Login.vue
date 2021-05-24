@@ -129,6 +129,7 @@ export default {
       })
         .then(function (response) {
           that.isLoading = false;
+          // console.log(response)
           // 拿到username account和其它会话信息，去判断怎么响应
           if (response.data.msg == 'success') {
             that.loginsuccess(response.data);

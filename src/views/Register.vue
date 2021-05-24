@@ -58,7 +58,7 @@ export default {
       let that = this;
       this.$axios({
         method: "post",
-        url: "/register",
+        url: "/owner/register",
         data: {
           id: userinput.account,
           password: userinput.opassword,
@@ -67,6 +67,7 @@ export default {
       })
         .then(function (response) {
           that.isLoading = false;
+          console.log(response)
           //判断是否成功，执行相应操作
           if (response.data.msg == "success") {
             that.registersuccess();
