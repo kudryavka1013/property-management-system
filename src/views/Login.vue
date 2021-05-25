@@ -154,9 +154,11 @@ export default {
       }
       this.$store.commit("upgradeAccount", data.result.id);
       this.$store.commit("upgradeUsername", data.result.username);
+      this.$store.commit("login")
       if (data.result.init) {
         this.$router.push("register");
       } else {
+        this.$store.commit("activate")
         this.$router.push("home");
       }
     },

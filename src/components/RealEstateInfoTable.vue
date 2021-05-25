@@ -7,13 +7,14 @@
     :loading="isLoading"
     loading-text="数据加载中，请稍后"
   >
+  
   </v-data-table>
 </template>
 
 <script>
 export default {
   name: "RealEstateInfoTable",
-  props: ["dataset", "search","isLoading"],
+  props: ["dataset", "search", "isLoading"],
   data: () => ({
     headers: [
       { text: "房产编号", value: "houseId" },

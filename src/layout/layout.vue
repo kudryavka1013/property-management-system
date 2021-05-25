@@ -27,26 +27,22 @@
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
-        <v-list-group no-action prepend-icon="mdi-home">
+        <v-list-group prepend-icon="mdi-home">
           <template v-slot:activator>
             <v-list-item-title>一级菜单</v-list-item-title>
           </template>
-          <v-list-group sub-group>
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title>二级菜单</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item>
-              <v-list-item-title>1234</v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title>1234</v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title>1234</v-list-item-title>
-            </v-list-item>
-          </v-list-group>
+          <v-list-item
+            :to="item.route"
+            v-for="(item, i) in navigation"
+            :key="i"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              {{ item.title }}
+            </v-list-item-title>
+          </v-list-item>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
@@ -57,7 +53,7 @@
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
+          <v-btn icon v-on="on" @click="logout">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </template>
@@ -81,17 +77,23 @@ export default {
           return true;
       }
     },
-    account(){
-      return this.$store.state.account
+    account() {
+      return this.$store.state.account;
     },
-    username(){
-      return  this.$store.state.username
-    }
+    username() {
+      return this.$store.state.username;
+    },
   },
   data: () => ({
     drawer: null,
     navigation: navigation,
   }),
+  methods:{
+    logout:function(){
+      this.$store.commit('logout')
+      this.$router.push('/login')
+    }
+  }
 };
 </script>
 
