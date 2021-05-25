@@ -20,6 +20,7 @@
         class="me-4"
         color="primary"
         @click="$emit('changeview', 'change-userinfo')"
+        disabled
       >
         <v-icon left>mdi-account-edit-outline</v-icon>
         <span>修改个人信息</span>
