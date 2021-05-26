@@ -33,6 +33,7 @@ import {
   checkPasswordValid,
   checkUsernameValid,
 } from "@/utils/checkValidate";
+import { apiChangePassword } from "@/config/api.js";
 export default {
   name: "Settings",
   components: {
@@ -93,34 +94,32 @@ export default {
     changePasswordReq: function (userinput) {
       //change password
       let that = this;
-      this.$axios({
-        method: "post",
-        url: "/owner/changepassword",
-        data: {
-          id: userinput.account,
-          password: userinput.opassword,
-          npassword: userinput.npassword,
-        },
+      apiChangePassword({
+        id: userinput.account,
+        password: userinput.opassword,
+        npassword: userinput.npassword,
       })
-        .then(function (response) {
+        .then((res) => {
           that.isLoading = false;
           //判断是否成功，执行相应操作
-          if (response.data.msg == "success") {
+          if (res.msg == "success") {
             that.changePasswordSuccess();
           } else {
             that.changeFail();
           }
         })
-        .catch(function (error) {
+        .catch((err) => {
           that.isLoading = false;
-          console.log(error);
+          console.log(err);
           alert("修改超时，请检查您的网络设置");
         });
     },
     changePasswordSuccess: function () {
       alert("修改成功，请重新登录");
-      this.isLoading = false;
+      // this.isLoading = false;
       this.$store.commit("upgradeAccount", "");
+      this.$store.commit("upgradeUsername", "");
+      this.$store.commit("logout");
       this.$router.push("login");
     },
     changeUserinfoReq: function (userinput) {

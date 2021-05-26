@@ -68,7 +68,7 @@ import {
   checkAccountValid,
   checkPasswordValid,
 } from "@/utils/checkValidate.js";
-
+import { apiLogin } from "@/config/api.js";
 export default {
   name: "Login",
   data: () => ({
@@ -117,33 +117,28 @@ export default {
       }
     },
     loginreq: function (act, psw) {
-      //login
+      //登录请求
       let that = this;
-      this.$axios({
-        method: "post",
-        url: "/owner/login",
-        data: {
-          id: act,
-          password: psw,
-        },
+      apiLogin({
+        id: act,
+        password: psw,
       })
-        .then(function (response) {
+        .then((res) => {
+          console.log(res);
           that.isLoading = false;
-          // console.log(response)
-          // 拿到username account和其它会话信息，去判断怎么响应
-          if (response.data.msg == 'success') {
-            that.loginsuccess(response.data);
+          if (res.msg == "success") {
+            that.loginsuccess(res.result);
           } else {
             that.loginfail();
           }
         })
-        .catch(function (error) {
+        .catch((err) => {
           that.isLoading = false;
-          console.log(error);
+          console.log(err);
           alert("登录超时，请检查您的网络设置");
         });
     },
-    loginsuccess: function (data) {
+    loginsuccess: function (result) {
       //记住密码功能，这里要在登录成功后执行
       if (this.remember) {
         localStorage.setItem("account", this.account);
@@ -152,14 +147,16 @@ export default {
         localStorage.removeItem("account");
         localStorage.removeItem("password");
       }
-      this.$store.commit("upgradeAccount", data.result.id);
-      this.$store.commit("upgradeUsername", data.result.username);
-      this.$store.commit("login")
-      if (data.result.init) {
+      //更新全局信息
+      this.$store.commit("upgradeAccount", result.id);
+      this.$store.commit("upgradeUsername", result.username);
+      this.$store.commit("login");
+      //判断是否需要激活（注册）
+      if (result.init) {
         this.$router.push("register");
       } else {
-        this.$store.commit("activate")
-        this.$router.push("home");
+        this.$store.commit("activate");
+        this.$router.push("user");
       }
     },
     loginfail: function () {

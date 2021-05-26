@@ -9,12 +9,12 @@ import axios from "axios";
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afacbffc337c3/anj';
 
 
 new Vue({
   vuetify,
   store,
   router,
+  // axios,
   render: h => h(App)
 }).$mount('#app')

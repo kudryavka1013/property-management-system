@@ -32,9 +32,9 @@
 <script>
 import RealEstateInfoTable from "../components/RealEstateInfoTable.vue";
 // @ is an alias to /src
-
+import { apiGetRealEstateInfo } from "@/config/api.js";
 export default {
-  name: "Home",
+  name: "User",
   components: {
     RealEstateInfoTable,
   },
@@ -43,28 +43,26 @@ export default {
     search: "",
     isLoading: false,
   }),
+  computed: {
+    account() {
+      return this.$store.state.account;
+    },
+  },
   methods: {
     refreshTable: function () {
       this.isLoading = true;
-      this.realReq();
+      this.realReq(this.account);
     },
-    realReq: function () {
+    realReq: function (id) {
       var that = this;
-      // this.realEstateInfo = [];
-      this.$axios({
-        url: "owner/getRealEstateInfo",
-        method: "get",
-        data: {
-          id: that.$store.state.account,
-        },
-      })
-        .then(function (response) {
-          // console.log(response);
-          that.realEstateInfo = response.data.realEstateInfo;
+      apiGetRealEstateInfo({ id: id })
+        .then((res) => {
+          console.log(res);
+          that.realEstateInfo = res.realEstateInfo;
           that.isLoading = false;
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((err) => {
+          console.log(err);
           that.isLoading = false;
         });
     },

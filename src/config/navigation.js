@@ -1,7 +1,7 @@
 const navigation = [{
-    route: 'home',
+    route: 'user',
     icon: 'mdi-home',
-    title: '主页'
+    title: '用户面板'
 }, {
     route: 'settings',
     icon: 'mdi-cog-outline',

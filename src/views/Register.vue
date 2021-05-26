@@ -23,6 +23,7 @@
 <script>
 import { checkAccountValid, checkPasswordValid } from "@/utils/checkValidate";
 import ChangePasswordForm from "@/components/ChangePasswordForm.vue";
+import { apiRegister } from "@/config/api.js";
 export default {
   name: "Register",
   components: { ChangePasswordForm },
@@ -48,46 +49,41 @@ export default {
         userinput.npassword == userinput.cpassword
       ) {
         this.isLoading = true;
-        this.registerreq(userinput);
+        this.registerReq(userinput);
       } else {
         alert("请检查你的输入");
       }
     },
-    registerreq: function (userinput) {
+    registerReq: function (userinput) {
       //register
       let that = this;
-      this.$axios({
-        method: "post",
-        url: "/owner/register",
-        data: {
-          id: userinput.account,
-          password: userinput.opassword,
-          npassword: userinput.npassword,
-        },
+      apiRegister({
+        id: userinput.account,
+        password: userinput.opassword,
+        npassword: userinput.npassword,
       })
-        .then(function (response) {
+        .then((res) => {
           that.isLoading = false;
-          console.log(response)
+          console.log(res);
           //判断是否成功，执行相应操作
-          if (response.data.msg == "success") {
-            that.registersuccess();
+          if (res.msg == "success") {
+            that.registerSuccess();
           } else {
-            that.registerfail();
+            that.registerFail();
           }
         })
-        .catch(function (error) {
+        .catch((err) => {
           that.isLoading = false;
-          console.log(error);
+          console.log(err);
           alert("激活超时，请检查您的网络设置");
         });
     },
-    registersuccess: function () {
+    registerSuccess: function () {
       alert("修改成功，请重新登录");
-      this.isLoading = false;
       this.$store.commit("upgradeAccount", "");
       this.$router.push("login");
     },
-    registerfail: function () {
+    registerFail: function () {
       alert("密码错误，请重新输入");
     },
   },
