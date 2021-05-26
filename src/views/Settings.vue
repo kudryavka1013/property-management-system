@@ -33,7 +33,7 @@ import {
   checkPasswordValid,
   checkUsernameValid,
 } from "@/utils/checkValidate";
-import { apiChangePassword } from "@/config/api.js";
+import { apiChangePassword, apiChangeUserinfo } from "@/config/api.js";
 export default {
   name: "Settings",
   components: {
@@ -123,37 +123,31 @@ export default {
       this.$router.push("login");
     },
     changeUserinfoReq: function (userinput) {
-      //change username
+      //change userinfo
       let that = this;
-      this.$axios({
-        method: "post",
-        url: "/owner/changeuserinfo",
-        data: {
-          id: userinput.account,
-          nusername: userinput.nusername,
-        },
+      apiChangeUserinfo({
+        id: userinput.account,
+        nusername: userinput.nusername,
       })
-        .then(function (response) {
+        .then((res) => {
           that.isLoading = false;
-          //判断是否成功，执行相应操作
-          if (response.data.msg) {
-            that.changeUserinfoSuccess(response.data);
+          if (res.msg == "success") {
+            that.changeUserinfoSuccess(res.result);
           } else {
             that.changeFail();
           }
         })
-        .catch(function (error) {
+        .catch((err) => {
           that.isLoading = false;
-          console.log(error);
+          console.log(err);
           alert("修改超时，请检查您的网络设置");
         });
     },
 
-    changeUserinfoSuccess: function (data) {
+    changeUserinfoSuccess: function (result) {
       alert("修改成功");
-      this.isLoading = false;
-      this.$store.commit("upgradeUsername", data.result.username);
-      this.$router.push("home");
+      this.$store.commit("upgradeUsername", result.username);
+      this.$router.push("user");
     },
     changeFail: function () {
       alert("修改失败，请检查输入");

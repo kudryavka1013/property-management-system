@@ -27,23 +27,6 @@
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
-        <v-list-group prepend-icon="mdi-home">
-          <template v-slot:activator>
-            <v-list-item-title>一级菜单</v-list-item-title>
-          </template>
-          <v-list-item
-            :to="item.route"
-            v-for="(item, i) in navigation"
-            :key="i"
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <!-- 顶部标题栏 -->
@@ -53,8 +36,9 @@
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" @click="logout">
-            <v-icon>mdi-logout</v-icon>
+          <v-btn tile depressed v-on="on" @click="logout" class="logout-btn">
+            <v-icon left>mdi-logout</v-icon>
+            <span>退出登录</span>
           </v-btn>
         </template>
         <span>退出登录</span>
@@ -88,14 +72,17 @@ export default {
     drawer: null,
     navigation: navigation,
   }),
-  methods:{
-    logout:function(){
-      this.$store.commit('logout')
-      this.$router.push('/login')
-    }
-  }
+  methods: {
+    logout: function () {
+      this.$store.commit("logout");
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 
 <style scoped>
+.logout-btn:hover{
+  color: #4CAF50;
+}
 </style>

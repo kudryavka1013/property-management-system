@@ -11,10 +11,6 @@ const navigation = [{
     icon: 'mdi-code-tags',
     title: '关于'
 }, {
-    route: 'login',
-    icon: 'mdi-link-variant',
-    title: '登录接口'
-}, {
     route: 'register',
     icon: 'mdi-link-variant',
     title: '注册接口'

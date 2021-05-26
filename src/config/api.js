@@ -13,3 +13,5 @@ export const apiRegister = p => post('/owner/register', p)
 export const apiGetRealEstateInfo = p => get('/owner/getRealEstateInfo', p)
 // 修改密码
 export const apiChangePassword = p => post('/owner/changePassword', p)
+// 修改个人信息
+export const apiChangeUserinfo = p => post('/owner/changeUserinfo', p)

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <v-card tile class="ma-4">
       <v-card-title class="mx-2">
         <span>房产管理</span>
