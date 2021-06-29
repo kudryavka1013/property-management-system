@@ -14,6 +14,18 @@ const navigation = [{
     route: 'register',
     icon: 'mdi-link-variant',
     title: '注册接口'
+},{
+    route: 'community',
+    icon: 'mdi-link-variant',
+    title: '小区总览'
+},{
+    route: 'building',
+    icon: 'mdi-link-variant',
+    title: '楼栋管理'
+},{
+    route: 'household',
+    icon: 'mdi-link-variant',
+    title: '房产管理'
 }]
 
 export default navigation

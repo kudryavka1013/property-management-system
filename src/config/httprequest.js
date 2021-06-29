@@ -1,5 +1,6 @@
 import axios from "axios"
 
+// axios.defaults.baseURL = 'http://anj.tivnan.cn';
 axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afacbffc337c3/anj';
 axios.defaults.timeout = 10000
 

@@ -5,6 +5,9 @@ import About from '../views/About.vue'
 import Login from '../views/Login.vue'
 import Settings from '../views/Settings.vue'
 import Register from '../views/Register.vue'
+import CommunityManage from '../views/CommunityManage'
+import BuildingManage from '../views/BuildingManage'
+import HouseholdManage from '../views/HouseholdManage'
 import store from '@/store'
 Vue.use(VueRouter)
 
@@ -47,6 +50,30 @@ const routes = [{
       requireAuth: true
     },
     component: Settings
+  },
+  {
+    path: '/community',
+    name: 'community',
+    meta: {
+      requireAuth: false
+    },
+    component: CommunityManage
+  },
+  {
+    path: '/building',
+    name: 'building',
+    meta: {
+      requireAuth: false
+    },
+    component: BuildingManage
+  },
+  {
+    path: '/household',
+    name: 'household',
+    meta: {
+      requireAuth: false
+    },
+    component: HouseholdManage
   },
   {
     path: '*',

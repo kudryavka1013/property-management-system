@@ -46,7 +46,19 @@
           :loading="isLoading"
           :disabled="isLoading"
         >
-          登 录
+          用户登录
+        </v-btn>
+        <v-spacer></v-spacer>
+         <v-btn
+          color="primary"
+          large
+          depressed
+          tile
+          @click="login"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          管理员登录
         </v-btn>
         <v-spacer></v-spacer>
         <v-checkbox
