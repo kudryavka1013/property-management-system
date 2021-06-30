@@ -24,12 +24,15 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.communityName"
+                    <v-select
+                      :items="communityInfo"
+                      v-model="editedItem.communityCode"
+                      item-text="communityName"
+                      item-value="communityCode"
                       label="所属小区"
-                      disabled
+                      :disabled="isEditing"
                     >
-                    </v-text-field>
+                    </v-select>
                   </v-col>
 
                   <v-col cols="4" sm="6" md="4">
@@ -39,6 +42,7 @@
                       item-text="buildingName"
                       item-value="buildingCode"
                       label="楼栋号"
+                      :disabled="isEditing"
                     >
                     </v-select>
                   </v-col>
@@ -52,11 +56,21 @@
 
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      :items="buildingInfo"
+                      :items="ownerInfo"
                       v-model="editedItem.ownerCode"
-                      label="持有人账户"
+                      item-text="ownerName"
+                      item-value="ownerId"
+                      label="持有人用户名"
                     >
                     </v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.ownerCode"
+                      disabled
+                      label="持有人账户"
+                    >
+                    </v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -83,10 +97,11 @@ import {
   apiAdminAddHousehold,
   apiAdminDeleteHousehold,
   apiAdminEditHousehold,
+  apiAdminGetBuilding,
 } from "../config/api";
 export default {
   name: "HouseholdInfoTable",
-  props: ["dataset", "search", "isLoading"],
+  props: ["dataset", "search", "isLoading", "communityInfo", "ownerInfo"],
   data: () => ({
     headers: [
       {
@@ -117,6 +132,7 @@ export default {
     dialog: false,
     editedItem: {
       code: "",
+      communityCode: "",
       communityName: "",
       buildingCode: "",
       buildingName: "",
@@ -125,16 +141,41 @@ export default {
     },
     defaultItem: {
       code: "",
+      communityCode: "",
       communityName: "",
       buildingCode: "",
       buildingName: "",
       name: "",
       ownerCode: "",
     },
+    buildingInfo: [],
+    isEditing: false,
   }),
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    "editedItem.communityCode": function () {
+      if (this.editedItem.communityCode != "") {
+        apiAdminGetBuilding({
+          code: this.editedItem.communityCode,
+        }).then((res) => {
+          console.log(res);
+          if (res.msg == "查询成功") {
+            for (let i = 0; i < res.results.length; i++) {
+              let temp = {
+                buildingCode: res.results[i].code,
+                buildingName: res.results[i].name,
+              };
+              // console.log(temp)
+              this.buildingInfo.splice(i, 1, temp);
+              // this.buildingInfo[i] = temp;
+              // console.log(this.buildingInfo[i])
+            }
+            console.log(this.buildingInfo);
+          }
+        });
+      }
     },
   },
   methods: {
@@ -143,11 +184,13 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+        this.isEditing = false;
       });
     },
     editItem: function (item) {
       this.editedIndex = this.dataset.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      this.isEditing = true;
       this.dialog = true;
     },
     deleteItem: function (item) {
@@ -171,11 +214,13 @@ export default {
     save: function () {
       if (this.editedIndex > -1) {
         // 编辑
+        console.log(this.editedItem.code)
+        console.log(this.editedItem.ownerCode)
+        console.log(this.editedItem.name)
         apiAdminEditHousehold({
           code: this.editedItem.code,
-          name: this.editedItem.name,
-          totalFloors: this.editedItem.totalFloors,
-          communityCode: this.editedItem.communityCode,
+          ownerCode: this.editedItem.ownerCode,
+          name: this.editedItem.name
         })
           .then((res) => {
             if (res.msg == "更新成功") {
@@ -189,8 +234,8 @@ export default {
         // 新增
         apiAdminAddHousehold({
           name: this.editedItem.name,
-          communityCode: this.editedItem.communityCode,
-          totalFloors: this.editedItem.totalFloors,
+          buildingCode: this.editedItem.buildingCode,
+          ownerCode: this.editedItem.ownerCode,
         })
           .then((res) => {
             if (res.msg == "添加成功") {

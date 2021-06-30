@@ -15,19 +15,15 @@
           value: "code"
         },
         {
-          text: "地址",
-          value: "address"
-        },
-        {
           text: "所属小区",
           value: "communityName"
         },
         {
           text: "楼栋号",
-          value: "buildingCode"
+          value: "buildingName"
         },
         {
-          text: "所有人",
+          text: "房产名称",
           value: "name"
         },
       ],

@@ -34,6 +34,7 @@ import {
   checkUsernameValid,
 } from "@/utils/checkValidate";
 import { apiChangePassword, apiChangeUserinfo } from "@/config/api.js";
+import { apiAdminChangePassword } from "../config/api";
 export default {
   name: "Settings",
   components: {
@@ -94,25 +95,47 @@ export default {
     changePasswordReq: function (userinput) {
       //change password
       let that = this;
-      apiChangePassword({
-        id: userinput.account,
-        password: userinput.opassword,
-        npassword: userinput.npassword,
-      })
-        .then((res) => {
-          that.isLoading = false;
-          //判断是否成功，执行相应操作
-          if (res.msg == "success") {
-            that.changePasswordSuccess();
-          } else {
-            that.changeFail();
-          }
+      if (this.$store.state.accountType == 1) {
+        apiChangePassword({
+          id: userinput.account,
+          password: userinput.opassword,
+          npassword: userinput.npassword,
         })
-        .catch((err) => {
-          that.isLoading = false;
-          console.log(err);
-          alert("修改超时，请检查您的网络设置");
-        });
+          .then((res) => {
+            that.isLoading = false;
+            //判断是否成功，执行相应操作
+            if (res.msg == "修改成功") {
+              that.changePasswordSuccess();
+            } else {
+              that.changeFail();
+            }
+          })
+          .catch((err) => {
+            that.isLoading = false;
+            console.log(err);
+            that.changeFail();
+          });
+      } else {
+        apiAdminChangePassword({
+          id: userinput.account,
+          password: userinput.opassword,
+          npassword: userinput.npassword,
+        })
+          .then((res) => {
+            that.isLoading = false;
+            //判断是否成功，执行相应操作
+            if (res.msg == "修改成功") {
+              that.changePasswordSuccess();
+            } else {
+              that.changeFail();
+            }
+          })
+          .catch((err) => {
+            that.isLoading = false;
+            console.log(err);
+            that.changeFail();
+          });
+      }
     },
     changePasswordSuccess: function () {
       alert("修改成功，请重新登录");
@@ -158,7 +181,7 @@ export default {
       return {
         account: this.$store.state.account,
         username: this.$store.state.username,
-        accountType: this.$store.state.accountType
+        accountType: this.$store.state.accountType,
       };
     },
     componentData() {

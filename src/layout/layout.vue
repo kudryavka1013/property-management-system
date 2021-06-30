@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import navigation from "../config/navigation";
+import { navigationAdmin, navigationOwner } from "../config/navigation";
 export default {
   name: "layout",
   computed: {
@@ -67,10 +67,13 @@ export default {
     username() {
       return this.$store.state.username;
     },
+    navigation(){
+      return this.$store.state.accountType == 1 ? navigationOwner : navigationAdmin
+    },
+
   },
   data: () => ({
     drawer: null,
-    navigation: navigation,
   }),
   methods: {
     logout: function () {
@@ -82,7 +85,7 @@ export default {
 </script>
 
 <style scoped>
-.logout-btn:hover{
-  color: #4CAF50;
+.logout-btn:hover {
+  color: #4caf50;
 }
 </style>

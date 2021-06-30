@@ -141,14 +141,12 @@ export default {
             that.isLoading = false;
             if (res.msg == "登录成功") {
               that.loginsuccess(res.results, type);
-            } else {
-              that.loginfail();
             }
           })
           .catch((err) => {
             that.isLoading = false;
             console.log(err);
-            alert("登录超时，请检查您的网络设置");
+            that.loginfail();
           });
       } else if (type == 2) {
         apiAdminLogin({
@@ -162,6 +160,10 @@ export default {
           } else {
             that.loginfail();
           }
+        }).catch((err)=>{
+          console.log(err)
+          that.isLoading = false
+          that.loginfail()
         });
       }
     },
@@ -177,11 +179,11 @@ export default {
       //更新全局信息
       this.$store.commit("upgradeAccount", results.id);
       this.$store.commit("upgradeUsername", results.username);
-      this.$store.commit("upgradeAccountType", type)
+      this.$store.commit("upgradeAccountType", type);
       this.$store.commit("login");
       //判断是否需要激活（注册）
       if (type == 1) {
-        if (results.init) {
+        if (!results.init) {
           this.$router.push("register");
         } else {
           this.$store.commit("activate");
@@ -191,7 +193,7 @@ export default {
       } else if (type == 2) {
         // 分配路由
         this.$store.commit("activate");
-        this.$router.push("user");
+        this.$router.push("community");
       }
     },
     loginfail: function () {

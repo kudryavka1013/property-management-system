@@ -13,45 +13,32 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              新增楼栋数据
+              新增业主信息
             </v-btn>
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">编辑楼栋</span>
+              <span class="headline">新增业主</span>
             </v-card-title>
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="4" sm="6" md="4">
-                    <v-select
-                      :items="communityInfo"
-                      v-model="editedItem.communityCode"
-                      item-text="communityName"
-                      item-value="communityCode"
-                      label="所属小区"
-                    >
-                    </v-select>
-                  </v-col>
-                  <v-col cols="8">
-                    <v-text-field
-                      v-model="editedItem.communityCode"
-                      label="所属小区编号"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.name"
-                      label="楼栋名"
+                      v-model="editedItem.id"
+                      label="用户ID"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.totalFloors"
-                      label="楼层数"
+                      v-model="editedItem.username"
+                      label="用户名"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.password"
+                      label="初始密码"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -68,60 +55,48 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <!-- <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon> -->
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import {
-  apiAdminAddBuilding,
-  apiAdminDeleteBuilding,
-  apiAdminEditBuilding,
-} from "../config/api";
+import { apiAdminAddOwner, apiAdminDeleteOwner } from '../config/api';
+
 export default {
-  name: "BuildingInfoTable",
-  props: ["dataset", "search", "isLoading", "communityInfo"],
+  name: "CommunityInfoTable",
+  props: ["dataset", "search", "isLoading"],
   data: () => ({
     headers: [
       {
-        text: "楼栋编号",
-        value: "code",
+        text: "用户ID",
+        value: "id",
       },
       {
-        text: "所属小区",
-        value: "communityName",
+        text: "用户名",
+        value: "username",
       },
       {
-        text: "楼栋名称",
-        value: "name",
-      },
-      {
-        text: "楼层数",
-        value: "totalFloors",
+        text: "是否激活",
+        value: "init",
       },
       {
         text: "操作",
         value: "actions",
-        sortable: false,
       },
     ],
     dialog: false,
     editedItem: {
-      code: "",
-      communityCode: "",
-      communityName: "",
-      name: "",
-      totalFloors: "",
+      id: "",
+      username: "",
+      password: "",
     },
     defaultItem: {
-      code: "",
-      communityCode: "",
-      communityName: "",
-      name: "",
-      totalFloors: "",
-    },    
+      id: "",
+      username: "",
+      password: "",
+    },
   }),
   watch: {
     dialog(val) {
@@ -142,11 +117,11 @@ export default {
       this.dialog = true;
     },
     deleteItem: function (item) {
-      //   const index = this.dataset.indexOf(item);
-      //   confirm("确定要删除该项吗") && this.dataset.splice(index, 1);
+      // const index = this.dataset.indexOf(item);
+      console.log(item.code)
       if (confirm("确定要删除该项吗")) {
-        apiAdminDeleteBuilding({
-          code: item.code,
+        apiAdminDeleteOwner({
+          id: item.id,
         })
           .then((res) => {
             console.log(res);
@@ -162,35 +137,27 @@ export default {
     save: function () {
       if (this.editedIndex > -1) {
         // 编辑
-        apiAdminEditBuilding({
-          code: this.editedItem.code,
-          name: this.editedItem.name,
-          totalFloors: this.editedItem.totalFloors,
-          communityCode: this.editedItem.communityCode,
-        })
-          .then((res) => {
-            if (res.msg == "更新成功") {
-              alert("更新成功");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        // apiAdminEditCommunity({
+        //   code: this.editedItem.code,
+        //   name: this.editedItem.name,
+        //   address: this.editedItem.address,
+        //   area: parseFloat(this.editedItem.area),
+        // });
       } else {
         // 新增
-        apiAdminAddBuilding({
-          name: this.editedItem.name,
-          communityCode: this.editedItem.communityCode,
-          totalFloors: this.editedItem.totalFloors,
+        apiAdminAddOwner({
+          id: this.editedItem.id,
+          username: this.editedItem.username,
+          password: this.editedItem.password,
         })
-          .then((res) => {
-            if (res.msg == "添加成功") {
-              alert("添加成功");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .then((res)=>{
+          if(res.msg == "添加成功"){
+            alert("添加成功")
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        });
       }
       this.close();
     },

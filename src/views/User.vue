@@ -49,7 +49,8 @@
             id: id
           })
           .then((res) => {
-            that.realEstateInfo = res.realEstateInfo;
+            console.log(res)
+            that.realEstateInfo = res.results;
             that.isLoading = false;
           })
           .catch((err) => {
@@ -60,7 +61,7 @@
     },
     mounted: function () {
       this.isLoading = true;
-      this.realReq();
+      this.realReq(this.account);
     },
   };
 </script>

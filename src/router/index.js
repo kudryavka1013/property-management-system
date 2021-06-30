@@ -8,6 +8,7 @@ import Register from '../views/Register.vue'
 import CommunityManage from '../views/CommunityManage'
 import BuildingManage from '../views/BuildingManage'
 import HouseholdManage from '../views/HouseholdManage'
+import OwnerManage from '../views/OwnerManage'
 import store from '@/store'
 Vue.use(VueRouter)
 
@@ -55,7 +56,7 @@ const routes = [{
     path: '/community',
     name: 'community',
     meta: {
-      requireAuth: false
+      requireAuth: true
     },
     component: CommunityManage
   },
@@ -63,7 +64,7 @@ const routes = [{
     path: '/building',
     name: 'building',
     meta: {
-      requireAuth: false
+      requireAuth: true
     },
     component: BuildingManage
   },
@@ -71,9 +72,17 @@ const routes = [{
     path: '/household',
     name: 'household',
     meta: {
-      requireAuth: false
+      requireAuth: true
     },
     component: HouseholdManage
+  },
+  {
+    path: '/ownerManage',
+    name: "ownerManage",
+    meta: {
+      requireAuth: true
+    },
+    component: OwnerManage
   },
   {
     path: '*',

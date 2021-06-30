@@ -23,7 +23,7 @@
 <script>
 import { checkAccountValid, checkPasswordValid } from "@/utils/checkValidate";
 import ChangePasswordForm from "@/components/ChangePasswordForm.vue";
-import { apiRegister } from "@/config/api.js";
+import { apiChangePassword } from '../config/api';
 export default {
   name: "Register",
   components: { ChangePasswordForm },
@@ -57,7 +57,7 @@ export default {
     registerReq: function (userinput) {
       //register
       let that = this;
-      apiRegister({
+      apiChangePassword({
         id: userinput.account,
         password: userinput.opassword,
         npassword: userinput.npassword,
@@ -66,7 +66,7 @@ export default {
           that.isLoading = false;
           console.log(res);
           //判断是否成功，执行相应操作
-          if (res.msg == "success") {
+          if (res.msg == "修改成功") {
             that.registerSuccess();
           } else {
             that.registerFail();
