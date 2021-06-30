@@ -32,7 +32,7 @@ const store = new Vuex.Store({
             state.isActivated = false
             state.account = ''
             state.username = ''
-            state.accountType = 0
+            state.accountType = 1
         }
     },
 
