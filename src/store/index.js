@@ -8,7 +8,8 @@ const store = new Vuex.Store({
         account: '',
         username: '',
         isAuthenticated: false,
-        isActivated: false
+        isActivated: false,
+        accountType: 1
     },
     mutations: {
         upgradeAccount(state, newAccount) {
@@ -16,6 +17,9 @@ const store = new Vuex.Store({
         },
         upgradeUsername(state, newUsername) {
             state.username = newUsername
+        },
+        upgradeAccountType(state, newAccountType){
+            state.accountType = newAccountType
         },
         activate(state) {
             state.isActivated = true
@@ -28,6 +32,7 @@ const store = new Vuex.Store({
             state.isActivated = false
             state.account = ''
             state.username = ''
+            state.accountType = 0
         }
     },
 

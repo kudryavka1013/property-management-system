@@ -6,9 +6,13 @@
         <span class="">用户名</span>
         <span>{{ username }}</span>
       </div>
-      <div>
+      <div class="mb-2">
         <span class="">账号</span>
         <span>{{ account }}</span>
+      </div>
+      <div class="mb-2">
+        <span>身份类型</span>
+        <span>{{ accountTypeMessage }}</span>
       </div>
     </div>
 
@@ -41,7 +45,12 @@
 <script>
 export default {
   name: "UserinfoCard",
-  props: ["account", "username"],
+  props: ["account", "username", "accountType"],
+  computed: {
+    accountTypeMessage() {
+      return this.accountType == 1 ? "用户" : "管理员";
+    },
+  },
 };
 </script>
 

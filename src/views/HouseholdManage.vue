@@ -45,6 +45,7 @@
                 var that = this;
                 apiAdminFindAllHousehold()
                     .then((res) => {
+                        console.log(res)
                         that.householdInfo = res.results;
                         that.isLoading = false;
                     })

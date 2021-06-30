@@ -42,19 +42,19 @@
           large
           depressed
           tile
-          @click="login"
+          @click="login(1)"
           :loading="isLoading"
           :disabled="isLoading"
         >
           用户登录
         </v-btn>
         <v-spacer></v-spacer>
-         <v-btn
+        <v-btn
           color="primary"
           large
           depressed
           tile
-          @click="login"
+          @click="login(2)"
           :loading="isLoading"
           :disabled="isLoading"
         >
@@ -80,7 +80,7 @@ import {
   checkAccountValid,
   checkPasswordValid,
 } from "@/utils/checkValidate.js";
-import { apiLogin } from "@/config/api.js";
+import { apiLogin, apiAdminLogin } from "@/config/api.js";
 export default {
   name: "Login",
   data: () => ({
@@ -115,7 +115,7 @@ export default {
         event.preventDefault();
       }
     },
-    login: function () {
+    login: function (type) {
       // 判断用户输入是否符合要求
       var accountIsValid = checkAccountValid(this.account);
       var passwordIsValid = checkPasswordValid(this.password);
@@ -123,34 +123,49 @@ export default {
       // console.log(passwordIsValid)
       if (accountIsValid && passwordIsValid) {
         this.isLoading = true;
-        this.loginreq(this.account, this.password);
+        this.loginreq(this.account, this.password, type);
       } else {
         alert("请检查你的输入");
       }
     },
-    loginreq: function (act, psw) {
+    loginreq: function (act, psw, type) {
       //登录请求
       let that = this;
-      apiLogin({
-        id: act,
-        password: psw,
-      })
-        .then((res) => {
+      if (type == 1) {
+        apiLogin({
+          id: act,
+          password: psw,
+        })
+          .then((res) => {
+            console.log(res);
+            that.isLoading = false;
+            if (res.msg == "登录成功") {
+              that.loginsuccess(res.results, type);
+            } else {
+              that.loginfail();
+            }
+          })
+          .catch((err) => {
+            that.isLoading = false;
+            console.log(err);
+            alert("登录超时，请检查您的网络设置");
+          });
+      } else if (type == 2) {
+        apiAdminLogin({
+          id: act,
+          password: psw,
+        }).then((res) => {
           console.log(res);
           that.isLoading = false;
-          if (res.msg == "success") {
-            that.loginsuccess(res.result);
+          if (res.msg == "登录成功") {
+            that.loginsuccess(res.results, type);
           } else {
             that.loginfail();
           }
-        })
-        .catch((err) => {
-          that.isLoading = false;
-          console.log(err);
-          alert("登录超时，请检查您的网络设置");
         });
+      }
     },
-    loginsuccess: function (result) {
+    loginsuccess: function (results, type) {
       //记住密码功能，这里要在登录成功后执行
       if (this.remember) {
         localStorage.setItem("account", this.account);
@@ -160,13 +175,21 @@ export default {
         localStorage.removeItem("password");
       }
       //更新全局信息
-      this.$store.commit("upgradeAccount", result.id);
-      this.$store.commit("upgradeUsername", result.username);
+      this.$store.commit("upgradeAccount", results.id);
+      this.$store.commit("upgradeUsername", results.username);
+      this.$store.commit("upgradeAccountType", type)
       this.$store.commit("login");
       //判断是否需要激活（注册）
-      if (result.init) {
-        this.$router.push("register");
-      } else {
+      if (type == 1) {
+        if (results.init) {
+          this.$router.push("register");
+        } else {
+          this.$store.commit("activate");
+          this.$router.push("user");
+          // 分配路由
+        }
+      } else if (type == 2) {
+        // 分配路由
         this.$store.commit("activate");
         this.$router.push("user");
       }

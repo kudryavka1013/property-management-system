@@ -1,7 +1,7 @@
 import axios from "axios"
 
 // axios.defaults.baseURL = 'http://anj.tivnan.cn';
-axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afacbffc337c3/anj';
+// axios.defaults.baseURL = 'https://www.fastmock.site/mock/10d77a2256638358995afacbffc337c3/anj';
 axios.defaults.timeout = 10000
 
 // get方法，对应get请求 
@@ -12,7 +12,7 @@ export function get(url, params) {
         axios({
             url: url,
             method: 'GET',
-            data: params
+            params: params
         }).then(res => {
             resolve(res.data)
         }).catch(err => {

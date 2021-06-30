@@ -158,6 +158,7 @@ export default {
       return {
         account: this.$store.state.account,
         username: this.$store.state.username,
+        accountType: this.$store.state.accountType
       };
     },
     componentData() {
